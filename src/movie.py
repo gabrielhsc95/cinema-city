@@ -34,6 +34,8 @@ def translate_name(name: str) -> str:
     link = f"https://imdb-api.com/hu/API/SearchTitle/{key}/{name}"
     response = requests.get(link)
     content = json.loads(response.content)
+    if content["results"] is None:
+        return name
     if len(content["results"]) > 0:
         return content["results"][0]["title"]
     return name
