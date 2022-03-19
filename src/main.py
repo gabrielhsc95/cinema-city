@@ -16,8 +16,10 @@ sorted_events = sort_events(events)
 for date_, movies_dict in sorted_events.items():
     print(date_.isoformat())
     for movie_id, cinemas_dict in movies_dict.items():
-        print(f"\t{find_movie(movies, movie_id).name}")
+        movie = find_movie(movies, movie_id)
+        print(f"\t{movie.name} {movie.poster}")
         for cinema_id, events_list in cinemas_dict.items():
-            print(f"\t\t{find_cinema(cinemas, cinema_id).name}")
+            cinema = find_cinema(cinemas, cinema_id)
+            print(f"\t\t{cinema.name} {cinema.address}")
             for e in events_list:
-                print(f"\t\t\t{e.session.date_time}")
+                print(f"{e}")

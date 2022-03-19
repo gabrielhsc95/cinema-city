@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Iterable, List, Dict
 from session import Session
 from movie import Movie, find_movie
@@ -11,28 +11,17 @@ class Event:
         self.movie = movie
         self.cinema = cinema
 
+    def get_book_link(self) -> str:
+        return f"https://www.cinemacity.hu/booking?presentationCode={self.session.session_id}&cinemaId={self.session.cinema_id}"
 
-#     def get_book_link(self) -> str:
-#         return f"https://www.cinemacity.hu/booking?presentationCode={self.session.session_id}&cinemaId={self.session.cinema_id}"
+    def __str__(self):
+        html = f"""\t\t\tStarts: {self.session.date_time.time().isoformat(timespec='minutes')}
+\t\t\tEnds: {(self.session.date_time + timedelta(minutes=self.movie.length)).time().isoformat(timespec='minutes')}
+\t\t\tLength: {self.movie.length//60}h{self.movie.length%60}m
+\t\t\tBook: {self.get_book_link()}
 
-#     def __str__(self):
-#         html = f"""
-# <div class="card">
-#     <div class="poster">
-#         <img src={self.movie.poster}/>
-#     </div>
-#     <div class="movieInfo">
-#         <h2>{self.movie.name}</h2>
-#         <b>Cinema</b>: {self.cinema.name}
-#         <b>Date</b>: {self.session.date_time.date().strftime("%d/%m/%y")}
-#         <b>Starts</b>: {self.session.date_time.time().isoformat(timespec='minutes')}
-#         <b>Ends</b>: {(self.session.date_time + timedelta(minutes=self.movie.length)).time().isoformat(timespec='minutes')}
-#         <b>Length</b>: {self.movie.length//60}h{self.movie.length%60}m
-#         <a href="{self.get_book_link()}">Book</a>
-#     </div>
-# </div>
-# """
-#         return html
+"""
+        return html
 
 
 def create_events(
