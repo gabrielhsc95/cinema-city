@@ -21,7 +21,7 @@ def scrape_sessions(cinema_ids: Iterable[int], date: str) -> List[Session]:
         response = requests.get(link)
         content = json.loads(response.content)
         for session in content["body"]["events"]:
-            if "original-lang-en-us" in session["attributeIds"]:
+            if any(["lang-en" in attribute for attribute in session["attributeIds"]]):
                 s = Session(
                     session["id"],
                     session["filmId"],
