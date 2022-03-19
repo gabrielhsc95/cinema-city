@@ -1,9 +1,8 @@
-from random import seed
-from typing import Iterable, List
+from datetime import datetime
+from typing import Iterable, List, Dict
 from session import Session
 from movie import Movie, find_movie
 from cinema import Cinema, find_cinema
-from datetime import timedelta
 
 
 class Event:
@@ -47,3 +46,22 @@ def create_events(
         )
         for session in sessions
     ]
+
+
+SortedEvents = Dict[datetime, Dict[str, Dict[int, List[Event]]]]
+
+
+def sort_events(events: Iterable[Event]) -> SortedEvents:
+    sorted_events: SortedEvents = {}
+    for event in events:
+        date_ = event.session.date_time.date()
+        movie = event.movie.movie_id
+        cinema = event.cinema.cinema_id
+        if sorted_events.get(date_) is None:
+            sorted_events[date_] = {}
+        if sorted_events[date_].get(movie) is None:
+            sorted_events[date_][movie] = {}
+        if sorted_events[date_][movie].get(cinema) is None:
+            sorted_events[date_][movie][cinema] = []
+        sorted_events[date_][movie][cinema].append(event)
+    return sorted_events
