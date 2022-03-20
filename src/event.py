@@ -3,6 +3,7 @@ from typing import Iterable, List, Dict
 from session import Session
 from movie import Movie, find_movie
 from cinema import Cinema, find_cinema
+from template import TEMPLATE_EVENT
 
 
 class Event:
@@ -14,14 +15,14 @@ class Event:
     def get_book_link(self) -> str:
         return f"https://www.cinemacity.hu/booking?presentationCode={self.session.session_id}&cinemaId={self.session.cinema_id}"
 
-    def __str__(self):
-        html = f"""\t\t\tStarts: {self.session.date_time.time().isoformat(timespec='minutes')}
-\t\t\tEnds: {(self.session.date_time + timedelta(minutes=self.movie.length)).time().isoformat(timespec='minutes')}
-\t\t\tLength: {self.movie.length//60}h{self.movie.length%60}m
-\t\t\tBook: {self.get_book_link()}
-
-"""
-        return html
+    def __str__(self) -> str:
+        return TEMPLATE_EVENT.format(
+            booking_link=self.get_book_link(),
+            start=self.session.date_time.time().isoformat(timespec="minutes"),
+            end=(self.session.date_time + timedelta(minutes=self.movie.length))
+            .time()
+            .isoformat(timespec="minutes"),
+        )
 
 
 def create_events(

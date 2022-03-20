@@ -2,6 +2,7 @@ from typing import Iterable, List
 import requests
 import json
 from api_key import key
+from template import TEMPLATE_MOVIE
 
 
 class Movie:
@@ -10,6 +11,13 @@ class Movie:
         self.name = translate_name(name)
         self.length = length
         self.poster = poster
+
+    def __str__(self) -> str:
+        return TEMPLATE_MOVIE.format(
+            name=self.name,
+            poster=self.poster,
+            length=f"{self.length//60}h{self.length%60}m",
+        )
 
 
 def scrape_movies(movie_ids: Iterable[str], date: str) -> List[Movie]:

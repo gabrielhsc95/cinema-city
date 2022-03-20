@@ -1,6 +1,7 @@
 from typing import List, Iterable
 import requests
 import json
+from template import TEMPLATE_CINEMA
 
 
 class Cinema:
@@ -8,6 +9,9 @@ class Cinema:
         self.cinema_id = cinema_id
         self.name = name
         self.address = address
+
+    def __str__(self) -> str:
+        return TEMPLATE_CINEMA.format(name=self.name)
 
 
 def scrape_cinemas(date: str) -> List[Cinema]:
